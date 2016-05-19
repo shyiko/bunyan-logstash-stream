@@ -1,0 +1,16 @@
+{
+  "name": "bunyan-logstash-stream",
+  "description": "Bunyan's Logstash stream",
+  "version": "0.1.0",
+  "author": "Stanley Shyiko <stanley.shyiko@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shyiko/bunyan-logstash-stream"
+  },
+  "main": "./src/bunyan-logstash-stream.js",
+  "keywords": [
+    "bunyan",
+    "logstash"
+  ]
+}
