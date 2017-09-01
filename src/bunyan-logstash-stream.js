@@ -1,8 +1,13 @@
-function LogstashStream(stream) {
+function LogstashStream(stream, o) {
   if (!stream) {
     throw new Error('"stream" is required');
   }
   this.stream = stream;
+  if (o != null && typeof o.replacer === 'function') {
+    this.replacer = o.replacer
+  } else {
+    this.replacer = function () {}
+  }
 }
 
 LogstashStream.prototype.write = function (msg) {
@@ -10,7 +15,7 @@ LogstashStream.prototype.write = function (msg) {
     throw new Error('stream has ended');
   }
   msg['@timestamp'] = msg.time;
-  this.stream.write(JSON.stringify(msg) + '\n');
+  this.stream.write(JSON.stringify(msg, this.replacer()) + '\n');
 };
 
 LogstashStream.prototype.end = function () {
@@ -18,5 +23,20 @@ LogstashStream.prototype.end = function () {
     this.write.apply(this, Array.prototype.slice.call(arguments));
   this.stream = null;
 };
+
+LogstashStream.replaceCycleWith = function (cycleValue) {
+  return function () {
+    var cache = [];
+    return function(key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+            return cycleValue;
+        }
+        cache.push(value);
+      }
+      return value;
+    }
+  }
+}
 
 module.exports = LogstashStream;
