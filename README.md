@@ -12,7 +12,7 @@ npm install bunyan-logstash-stream --save
 
 ## Usage
 
-```
+```javascript
 var bunyan = require('bunyan');
 var LogstashStream = require('bunyan-logstash-stream');
 
